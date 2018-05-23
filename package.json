@@ -1,0 +1,48 @@
+{
+  "name": "vdel",
+  "version": "1.0.0",
+  "description": "Deletes one or more values from an Array, Map, Object, Set, or other collection.",
+  "keywords": [
+    "delete",
+    "remove",
+    "value",
+    "collection",
+    "array",
+    "Map",
+    "object",
+    "Set",
+    "WeakSet"
+  ],
+  "author": "John Lamansky",
+  "license": "MIT",
+  "homepage": "https://github.com/lamansky/vdel",
+  "repository": "lamansky/vdel",
+  "main": "index.js",
+  "files": [],
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "dependencies": {
+    "can-delete-prop": "^1.0.0",
+    "is-instance-of": "^1.0.1",
+    "is-object": "^1.0.1",
+    "keys-of": "^1.0.0",
+    "purge": "^1.0.0",
+    "xfn": "^1.0.0"
+  },
+  "devDependencies": {
+    "equals": "^1.0.5",
+    "eslint-config-lamansky": "^1.0.0",
+    "is-array-with": "^1.0.0",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "eslintConfig": {
+    "extends": "lamansky",
+    "env": {
+      "mocha": true
+    }
+  }
+}
