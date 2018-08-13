@@ -28,7 +28,9 @@
     "can-delete-prop": "^1.0.0",
     "is-instance-of": "^1.0.1",
     "is-object": "^1.0.1",
-    "keys-of": "^1.0.0",
+    "keys-of": "^1.1.0",
+    "kget": "^1.0.0",
+    "pfn": "^1.0.0",
     "purge": "^1.0.0",
     "xfn": "^1.0.0"
   },

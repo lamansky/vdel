@@ -5,6 +5,8 @@ const equals = require('equals')
 const is = require('is-instance-of')
 const isObject = require('is-object')
 const keysOf = require('keys-of')
+const kget = require('kget')
+const pfn = require('pfn')
 const purge = require('purge')
 const xfn = require('xfn')
 
@@ -12,7 +14,10 @@ module.exports = xfn({
   pluralArg: 1,
   pluralProp: 'all',
 }, function del (collection, valuesToDelete, options = {}) {
-  const {arrays = [], loose, looselyEquals = equals, maps = [], sets = [], weakSets = []} = options
+  const {arrays = [], compareBy, compareByOptions, loose, looselyEquals = equals, maps = [], sets = [], weakSets = []} = options
+  let {compareAs} = options
+
+  compareAs = typeof compareBy === 'undefined' ? pfn(compareAs) : pfn(compareAs, x => kget(x, compareBy, compareByOptions))
 
   let itemsDeleted = 0
 
@@ -20,9 +25,12 @@ module.exports = xfn({
 
   if (is(collection, ['Array', arrays])) {
     const oldSize = collection.length
-    purge(collection, loose ? v => valuesToDelete.some(d => looselyEquals(v, d)) : v => valuesToDelete.includes(v))
+    purge(collection, loose
+      ? v => { v = compareAs(v); return valuesToDelete.some(d => looselyEquals(v, d)) }
+      : v => valuesToDelete.includes(compareAs(v))
+    )
     return oldSize - collection.length
-  } else if (is(collection, ['WeakSet', weakSets]) || (!loose && is(collection, ['Set', sets]))) {
+  } else if (is(collection, ['WeakSet', weakSets])) {
     for (const d of valuesToDelete) {
       if (collection.has(d)) {
         collection.delete(d)
@@ -31,7 +39,7 @@ module.exports = xfn({
     }
   } else if (is(collection, ['Set', sets])) {
     const oldSize = collection.size
-    const values = Array.from(collection).filter(v => !valuesToDelete.some(d => looselyEquals(v, d)))
+    const values = Array.from(collection).filter(v => { v = compareAs(v); return !valuesToDelete.some(d => looselyEquals(v, d)) })
     collection.clear()
     for (const v of values) collection.add(v)
     return oldSize - collection.size

@@ -83,6 +83,61 @@ describe('del()', function () {
     assert(isArrayWith(Array.from(set), 2))
   })
 
+  it('should transform existing Array values if `compareAs` is set', function () {
+    const arr = [1, 3]
+    del(arr, 2, {compareAs: x => x * 2})
+    assert(isArrayWith(arr, 3))
+  })
+
+  it('should transform existing Set values if `compareAs` is set', function () {
+    const set = new Set(['a', 'b'])
+    del(set, 'A', {compareAs: x => x.toUpperCase()})
+    assert(isArrayWith(Array.from(set), 'b'))
+  })
+
+  it('should transform existing Map values if `compareAs` is set', function () {
+    const map = new Map([['a', 1], ['b', 1], ['c', 2]])
+    assert.strictEqual(map.size, 3)
+    assert.strictEqual(del(map, 2, {compareAs: x => x * 2}), 2)
+    assert.strictEqual(map.size, 1)
+    assert(equals(Array.from(map.entries()), [['c', 2]]))
+  })
+
+  it('should transform existing Object values if `compareAs` is set', function () {
+    const obj = {a: 1, b: 1, c: 2}
+    assert.strictEqual(del(obj, 1, {compareAs: x => x * 2}), 0)
+    assert.strictEqual(del(obj, 2, {compareAs: x => x * 2}), 2)
+    assert(equals(Object.entries(obj), [['c', 2]]))
+  })
+
+  it('should retrieve `compareBy` key from existing Array values', function () {
+    const arr = ['example', 'test']
+    del(arr, 'x', {compareBy: 1})
+    assert(isArrayWith(arr, 'test'))
+  })
+
+  it('should retrieve `compareBy` key from existing Set values', function () {
+    const set = new Set(['example', 'test'])
+    del(set, 'x', {compareBy: 1})
+    assert(isArrayWith(Array.from(set), 'test'))
+  })
+
+  it('should retrieve `compareBy` key from existing Map values', function () {
+    const map = new Map([['a', [1, 2]], ['b', [1, 2]], ['c', [2, 1]]])
+    assert.strictEqual(map.size, 3)
+    assert.strictEqual(del(map, 1), 0)
+    assert.strictEqual(del(map, 1, {compareBy: 0}), 2)
+    assert.strictEqual(map.size, 1)
+    assert(equals(Array.from(map.entries()), [['c', [2, 1]]]))
+  })
+
+  it('should retrieve `compareBy` key from existing Object values', function () {
+    const obj = {a: [1, 2], b: [1, 2], c: [2, 1]}
+    assert.strictEqual(del(obj, 1), 0)
+    assert.strictEqual(del(obj, 1, {compareBy: 0}), 2)
+    assert(equals(Object.entries(obj), [['c', [2, 1]]]))
+  })
+
   it('should return the number of items deleted', function () {
     assert.strictEqual(del([1], 1), 1)
   })
