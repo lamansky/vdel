@@ -13,9 +13,11 @@
     "Set",
     "WeakSet"
   ],
-  "author": "John Lamansky",
+  "author": {
+    "name": "Fr. John Lamansky",
+    "url": "lamansky.com"
+  },
   "license": "MIT",
-  "homepage": "https://github.com/lamansky/vdel",
   "repository": "lamansky/vdel",
   "main": "index.js",
   "files": [],
